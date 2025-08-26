@@ -1,0 +1,129 @@
+HTML for index.html (Home Page):
+
+HTML
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Capstone Project</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="portfolio.html">Portfolio</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+    <main>
+        <h1>Welcome to My Capstone Project!</h1>
+        <p>This is the homepage of my final web application.</p>
+    </main>
+    <footer>
+        <p>&copy; 2025 My App</p>
+    </footer>
+</body>
+</html>
+JavaScript (app.js) for Dynamic Content:
+
+JavaScript
+
+// Example of fetching and displaying dynamic content
+const mainContent = document.querySelector('main');
+
+async function loadPageContent(page) {
+    // In a real app, you might fetch content from a JSON file or API
+    const response = await fetch(`${page}.json`);
+    const data = await response.json();
+    
+    // Update the main content area dynamically
+    mainContent.innerHTML = `<h1>${data.title}</h1><p>${data.content}</p>`;
+}
+
+// Example of a simple client-side router
+document.querySelectorAll('nav a').forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const page = e.target.textContent.toLowerCase();
+        // A simple way to handle navigation without full page reloads
+        console.log(`Navigating to ${page} page...`);
+        // loadPageContent(page); // Uncomment this line if you create the JSON files
+    });
+});
+2. Optimize for Performance
+Here are code examples for key optimization techniques.
+
+Lazy Loading Images:
+Adding loading="lazy" to an image tag tells the browser to only load the image when it's about to enter the viewport, saving bandwidth and improving initial page load time.
+
+HTML
+
+<img src="large-image.jpg" alt="A large scenic photo" loading="lazy">
+Minimizing JavaScript:
+To minimize your code, you would use a build tool like webpack or an online minifier. The tool takes your original code and generates a compressed version.
+
+Original JavaScript (script.js):
+
+JavaScript
+
+// A simple function to log a message
+function showGreeting() {
+  const message = "Hello, world!";
+  console.log(message);
+}
+showGreeting();
+Minified JavaScript (script.min.js):
+
+JavaScript
+
+function showGreeting(){const a="Hello, world!";console.log(a)}showGreeting();
+3. Ensure Cross-Browser Compatibility and Mobile Responsiveness
+This involves a combination of HTML and CSS.
+
+Viewport Meta Tag:
+This single line of HTML is crucial for making your website responsive on mobile devices. It must be in the <head> of your HTML document.
+
+HTML
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+CSS Media Queries:
+This is the most common method for creating responsive layouts. The code below adjusts the layout and font sizes for different screen widths.
+
+CSS (styles.css):
+
+CSS
+
+/* General styles for all screen sizes */
+body {
+    font-family: sans-serif;
+    padding: 20px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Styles applied only when the screen is 600px wide or less */
+@media (max-width: 600px) {
+    .container {
+        flex-direction: column; /* Stacks items vertically on small screens */
+    }
+    h1 {
+        font-size: 1.5em; /* Shrinks the heading size */
+    }
+}
+
+/* Styles applied only when the screen is 1200px wide or more */
+@media (min-width: 1200px) {
+    .container {
+        flex-direction: row; /* Arranges items horizontally on large screens */
+        justify-content: space-between;
+    }
+}
