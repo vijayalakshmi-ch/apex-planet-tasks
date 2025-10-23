@@ -1,20 +1,309 @@
 Task 1: Basics of Web Development 👨‍💻
 Action: Create a button that triggers an alert message when clicked.
 
-HTML:
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Task 1 — Basics of Web Development</title>
+  <meta name="description" content="Simple webpage demonstrating HTML, CSS and JavaScript basics." />
 
-HTML
+  <!-- Simple, readable CSS -->
+  <style>
+    :root{
+      --bg: #f6f8fa;
+      --card: #ffffff;
+      --primary: #0b69ff;
+      --muted: #6b7280;
+      --radius: 10px;
+      --maxw: 900px;
+    }
 
-<button id="myButton">Click Me!</button>
-JavaScript:
+    *{box-sizing: border-box}
+    body{
+      margin:0;
+      font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg, var(--bg), #eef2f6);
+      color:#0f1724;
+      line-height:1.5;
+      -webkit-font-smoothing:antialiased;
+      padding:32px;
+      display:flex;
+      justify-content:center;
+    }
 
-JavaScript
+    .container{
+      width:100%;
+      max-width:var(--maxw);
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:0 6px 20px rgba(8,15,30,0.08);
+      padding:28px;
+    }
 
-// Get the button element by its ID
-const myButton = document.getElementById('myButton');
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      margin-bottom:18px;
+    }
 
-// Add a click event listener to the button
-myButton.addEventListener('click', () => {
-  // Show an alert message when the button is clicked
-  alert('Hello, you clicked the button!');
-});
+    header h1{
+      margin:0;
+      font-size:20px;
+    }
+    header p{margin:0;color:var(--muted);font-size:13px}
+
+    nav a{
+      color:var(--primary);
+      text-decoration:none;
+      margin-left:12px;
+      font-weight:600;
+      font-size:14px;
+    }
+
+    main{
+      display:grid;
+      grid-template-columns: 1fr 320px;
+      gap:20px;
+    }
+
+    /* Responsive: stack columns on narrow viewports */
+    @media (max-width:880px){
+      main{grid-template-columns:1fr}
+    }
+
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(250,250,252,0.95));
+      border-radius:10px;
+      padding:18px;
+      box-shadow:0 3px 10px rgba(10,15,30,0.03);
+    }
+
+    .hero img{
+      width:100%;
+      border-radius:8px;
+      display:block;
+      margin-bottom:12px;
+    }
+
+    .muted{color:var(--muted); font-size:14px;}
+
+    .btn{
+      display:inline-block;
+      background:var(--primary);
+      color:white;
+      padding:8px 12px;
+      border-radius:8px;
+      border:0;
+      cursor:pointer;
+      font-weight:600;
+      transition:transform .12s ease, box-shadow .12s ease;
+    }
+    .btn:hover{transform:translateY(-2px); box-shadow:0 6px 18px rgba(11,105,255,0.15)}
+
+    .secondary{
+      background:transparent;
+      color:var(--primary);
+      border:2px solid rgba(11,105,255,0.12);
+      padding:6px 10px;
+      border-radius:8px;
+    }
+
+    /* small utilities */
+    ul{padding-left:18px}
+    .small{font-size:13px;color:var(--muted)}
+    .spaced{margin-top:12px}
+
+    /* sidebar */
+    aside .section{margin-bottom:16px}
+    .link-list a{display:block;padding:8px 0;color:var(--primary);text-decoration:none}
+    .caption{font-size:13px;color:var(--muted);margin-top:6px}
+    input[type="text"]{width:100%;padding:8px;border-radius:6px;border:1px solid #e6e9ee}
+  </style>
+</head>
+<body>
+
+  <div class="container" role="main">
+    <header>
+      <div>
+        <h1>Task 1 — Basics of Web Development</h1>
+        <p class="small">A demo page built with HTML, CSS & JavaScript</p>
+      </div>
+      <nav aria-label="primary">
+        <a href="#about">About</a>
+        <a href="#demo">Demo</a>
+        <a href="#resources" class="secondary">Resources</a>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Left column: content -->
+      <section class="card" id="about" aria-labelledby="about-heading">
+        <h2 id="about-heading">About this page</h2>
+        <p class="muted spaced">
+          This simple webpage demonstrates foundational web concepts: semantic HTML for structure,
+          CSS for styling and layout, and JavaScript for client-side interactivity. Use the
+          interactive controls on the right to try features.
+        </p>
+
+        <div class="hero spaced">
+          <!-- placeholder image - replace with your own screenshot when preparing report -->
+          <img id="heroImage" src="https://via.placeholder.com/900x360.png?text=Your+Project+Screenshot" alt="Screenshot of project homepage">
+          <p class="caption">Figure: example project screenshot (replace with your own).</p>
+        </div>
+
+        <h3 class="spaced">Key elements demonstrated</h3>
+        <ul>
+          <li><strong>Headings & Paragraphs:</strong> semantic tags like &lt;h1&gt;–&lt;h3&gt;, &lt;p&gt;</li>
+          <li><strong>Images & Links:</strong> &lt;img&gt; with alt text, and accessible &lt;a&gt; links</li>
+          <li><strong>Forms & Inputs:</strong> basic text input and client-side validation demo (see sidebar)</li>
+          <li><strong>DOM Manipulation:</strong> adding/removing list items and interactive buttons</li>
+        </ul>
+
+        <h3 class="spaced">Example code snippets</h3>
+        <p class="small muted">
+          Use developer tools (F12) to inspect DOM, view CSS, and check console logs while interacting.
+        </p>
+
+        <div class="spaced">
+          <button class="btn" id="alertBtn">Click for Alert</button>
+          <button class="btn spaced" id="addItemBtn" style="margin-left:8px">Add Sample Item</button>
+          <button class="btn spaced secondary" id="toggleTheme" style="margin-left:8px">Toggle Dark</button>
+        </div>
+
+        <div class="spaced">
+          <h4>My favorites</h4>
+          <ul id="favList">
+            <li>Clean HTML structure</li>
+            <li>Readable CSS</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Right column: interactive controls / resources -->
+      <aside>
+        <div class="card section" id="demo" aria-labelledby="demo-heading">
+          <h3 id="demo-heading">Interactive Demo</h3>
+          <p class="small muted">Try the controls below to see basic JavaScript interactions.</p>
+
+          <label for="newItem" class="small spaced">Add a new favorite (type and click add)</label>
+          <input id="newItem" type="text" placeholder="e.g., Responsive layout" />
+          <div style="margin-top:8px">
+            <button class="btn" id="addFromInput">Add</button>
+            <button class="btn secondary" id="clearList" style="margin-left:8px">Clear List</button>
+          </div>
+
+          <hr style="margin:12px 0;border:none;border-top:1px solid #eef2f6">
+
+          <p class="small">External resources:</p>
+          <div class="link-list">
+            <a href="https://developer.mozilla.org/" target="_blank" rel="noopener">MDN Web Docs</a>
+            <a href="https://getbootstrap.com/" target="_blank" rel="noopener">Bootstrap (CSS examples)</a>
+            <a href="https://github.com/" target="_blank" rel="noopener">GitHub (version control)</a>
+          </div>
+        </div>
+
+        <div class="card section" id="resources" aria-labelledby="resources-heading">
+          <h4 id="resources-heading">Quick links</h4>
+          <p class="small muted">Useful tasks for your internship submission:</p>
+          <ul class="small">
+            <li>Record screen with your app</li>
+            <li>Upload project to GitHub</li>
+            <li>Share demo link on LinkedIn</li>
+          </ul>
+        </div>
+      </aside>
+    </main>
+
+    <footer style="margin-top:18px; text-align:center" class="small muted">
+      Certificate ID: APSPL2514570 • ApexPlanet Software Pvt. Ltd.
+    </footer>
+  </div>
+
+  <!-- JavaScript: interactive behavior -->
+  <script>
+    // Basic DOM helpers
+    const alertBtn = document.getElementById('alertBtn');
+    const addItemBtn = document.getElementById('addItemBtn');
+    const favList = document.getElementById('favList');
+    const newItemInput = document.getElementById('newItem');
+    const addFromInput = document.getElementById('addFromInput');
+    const clearList = document.getElementById('clearList');
+    const heroImage = document.getElementById('heroImage');
+    const toggleTheme = document.getElementById('toggleTheme');
+
+    // 1) Simple alert interaction
+    alertBtn.addEventListener('click', () => {
+      alert('Hello! You clicked the alert button. Welcome to Task 1 demo.');
+    });
+
+    // 2) Add a sample list item (demonstrates DOM creation and append)
+    addItemBtn.addEventListener('click', () => {
+      const li = document.createElement('li');
+      li.textContent = 'New interactive item added at ' + new Date().toLocaleTimeString();
+      favList.appendChild(li);
+      li.scrollIntoView({behavior: 'smooth'});
+    });
+
+    // 3) Add from input with basic validation
+    addFromInput.addEventListener('click', () => {
+      const text = newItemInput.value.trim();
+      if (!text) {
+        // show a simple inline validation (not a JS alert)
+        newItemInput.style.borderColor = '#ff6b6b';
+        newItemInput.placeholder = 'Please enter a value';
+        return;
+      }
+      const li = document.createElement('li');
+      li.textContent = text;
+      favList.appendChild(li);
+      newItemInput.value = '';
+      newItemInput.style.borderColor = '#dbeafe';
+    });
+
+    // 4) Clear list
+    clearList.addEventListener('click', () => {
+      if (!confirm('Clear all favorite items?')) return;
+      favList.innerHTML = '';
+    });
+
+    // 5) Change hero image on click (demonstrates attribute manipulation)
+    heroImage.addEventListener('click', () => {
+      // swap between two placeholder images
+      const current = heroImage.src;
+      heroImage.src = current.includes('900x360') 
+        ? 'https://via.placeholder.com/900x360.png?text=Alternate+View'
+        : 'https://via.placeholder.com/900x360.png?text=Your+Project+Screenshot';
+    });
+
+    // 6) Simple theme toggle (adds dark mode styles)
+    let dark = false;
+    toggleTheme.addEventListener('click', () => {
+      dark = !dark;
+      if (dark){
+        document.documentElement.style.setProperty('--bg', '#0b1220');
+        document.documentElement.style.setProperty('--card', '#071023');
+        document.documentElement.style.setProperty('--primary', '#60a5fa');
+        document.documentElement.style.setProperty('--muted', '#94a3b8');
+        document.body.style.color = '#e6eef8';
+        toggleTheme.textContent = 'Toggle Light';
+      } else {
+        document.documentElement.style.setProperty('--bg', '#f6f8fa');
+        document.documentElement.style.setProperty('--card', '#ffffff');
+        document.documentElement.style.setProperty('--primary', '#0b69ff');
+        document.documentElement.style.setProperty('--muted', '#6b7280');
+        document.body.style.color = '#0f1724';
+        toggleTheme.textContent = 'Toggle Dark';
+      }
+    });
+
+    // Accessibility: allow Enter key to add item from input
+    newItemInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') addFromInput.click();
+    });
+  </script>
+</body>
+</html>
