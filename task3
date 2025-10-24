@@ -1,45 +1,261 @@
 Task 3: Advanced Styling and JavaScript 🚀
 Action: Fetch data from a public API (e.g., joke API) and display it on the webpage.
 
-HTML:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Quiz App</title>
+  <style>
+    /* ====== GLOBAL STYLES ====== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-HTML
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #333;
+    }
 
-<div class="joke-container">
-  <h2>Random Joke:</h2>
-  <p id="jokeText">Loading joke...</p>
-  <button id="newJokeBtn">Get New Joke</button>
-</div>
-JavaScript:
+    /* ====== CONTAINER ====== */
+    .quiz-container {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 600px;
+      padding: 2rem;
+      animation: fadeIn 1s ease-in-out;
+    }
 
-JavaScript
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-const jokeTextElement = document.getElementById('jokeText');
-const newJokeBtn = document.getElementById('newJokeBtn');
+    h1 {
+      text-align: center;
+      color: #5b86e5;
+      margin-bottom: 1rem;
+    }
 
-// Function to fetch and display a joke
-async function fetchJoke() {
-  try {
-    const response = await fetch('https://icanhazdadjoke.com/', {
-      headers: {
-        'Accept': 'application/json'
+    .question {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+    }
+
+    .option {
+      background: #f2f2f2;
+      padding: 0.8rem 1rem;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .option:hover {
+      background: #e0e7ff;
+      border-color: #667eea;
+    }
+
+    .option.correct {
+      background: #d4edda;
+      border-color: #28a745;
+      color: #155724;
+    }
+
+    .option.wrong {
+      background: #f8d7da;
+      border-color: #dc3545;
+      color: #721c24;
+    }
+
+    .btn {
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 0.8rem;
+      background: #667eea;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #5b68d4;
+    }
+
+    .score-section {
+      text-align: center;
+      font-size: 1.2rem;
+    }
+
+    .restart-btn {
+      background: #36d1dc;
+      margin-top: 1rem;
+    }
+
+    /* ====== RESPONSIVE DESIGN ====== */
+    @media (max-width: 480px) {
+      .quiz-container {
+        padding: 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .question {
+        font-size: 1rem;
+      }
+
+      .option {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>JavaScript Quiz</h1>
+    <div id="quiz-content">
+      <div class="question" id="question">Loading question...</div>
+      <div class="options" id="options"></div>
+      <button class="btn" id="next-btn">Next</button>
+    </div>
+    <div id="score-section" class="score-section" style="display:none;">
+      <h2>Your Score:</h2>
+      <p id="score-text"></p>
+      <button class="btn restart-btn" id="restart-btn">Restart Quiz</button>
+    </div>
+  </div>
+
+  <script>
+    // ====== QUIZ DATA ======
+    const quizData = [
+      {
+        question: "Which of the following is NOT a JavaScript data type?",
+        options: ["String", "Boolean", "Float", "Undefined"],
+        correct: 2
+      },
+      {
+        question: "What does DOM stand for?",
+        options: [
+          "Document Object Model",
+          "Display Object Management",
+          "Digital Ordinance Model",
+          "Desktop Oriented Mode"
+        ],
+        correct: 0
+      },
+      {
+        question: "Which method is used to add a new element to the DOM in JavaScript?",
+        options: ["appendChild()", "addElement()", "insert()", "push()"],
+        correct: 0
+      },
+      {
+        question: "Which CSS property is used to make a responsive layout?",
+        options: ["float", "position", "flexbox", "overflow"],
+        correct: 2
+      },
+      {
+        question: "Which JavaScript method is used to access an HTML element by ID?",
+        options: ["getElementById()", "querySelectorAll()", "getElementByName()", "getElementsByClass()"],
+        correct: 0
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const nextBtn = document.getElementById("next-btn");
+    const scoreSection = document.getElementById("score-section");
+    const scoreText = document.getElementById("score-text");
+    const quizContent = document.getElementById("quiz-content");
+    const restartBtn = document.getElementById("restart-btn");
+
+    // ====== LOAD QUESTION ======
+    function loadQuestion() {
+      const current = quizData[currentQuestionIndex];
+      questionEl.textContent = `${currentQuestionIndex + 1}. ${current.question}`;
+      optionsEl.innerHTML = "";
+
+      current.options.forEach((option, index) => {
+        const btn = document.createElement("div");
+        btn.classList.add("option");
+        btn.textContent = option;
+        btn.onclick = () => selectOption(index);
+        optionsEl.appendChild(btn);
+      });
+
+      nextBtn.style.display = "none";
+    }
+
+    // ====== SELECT OPTION ======
+    function selectOption(index) {
+      const current = quizData[currentQuestionIndex];
+      const allOptions = document.querySelectorAll(".option");
+
+      allOptions.forEach(btn => (btn.style.pointerEvents = "none")); // Disable further clicks
+
+      if (index === current.correct) {
+        allOptions[index].classList.add("correct");
+        score++;
+      } else {
+        allOptions[index].classList.add("wrong");
+        allOptions[current.correct].classList.add("correct");
+      }
+
+      nextBtn.style.display = "block";
+    }
+
+    // ====== NEXT QUESTION ======
+    nextBtn.addEventListener("click", () => {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < quizData.length) {
+        loadQuestion();
+      } else {
+        showScore();
       }
     });
 
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
+    // ====== SHOW SCORE ======
+    function showScore() {
+      quizContent.style.display = "none";
+      scoreSection.style.display = "block";
+      scoreText.textContent = `${score} / ${quizData.length} correct answers`;
     }
 
-    const data = await response.json();
-    jokeTextElement.textContent = data.joke;
-  } catch (error) {
-    console.error('There was a problem fetching the joke:', error);
-    jokeTextElement.textContent = 'Failed to load joke. Please try again later.';
-  }
-}
+    // ====== RESTART QUIZ ======
+    restartBtn.addEventListener("click", () => {
+      currentQuestionIndex = 0;
+      score = 0;
+      quizContent.style.display = "block";
+      scoreSection.style.display = "none";
+      loadQuestion();
+    });
 
-// Initial fetch when the page loads
-fetchJoke();
-
-// Add event listener to the button to get a new joke
-newJokeBtn.addEventListener('click', fetchJoke);
+    // Initial load
+    loadQuestion();
+  </script>
+</body>
+</html>
