@@ -2,128 +2,366 @@ HTML for index.html (Home Page):
 
 HTML
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Capstone Project</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="app.js" defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vijayalakshmi Chandra — Internship Portfolio</title>
+  <meta name="description" content="Portfolio of Vijayalakshmi Chandra — frontend & full‑stack intern. Projects, mini apps, blog, to‑do, quiz, contact. Optimized and responsive." />
+  <meta name="theme-color" content="#2563eb" />
+
+  <style>
+    /* ----------------- THEME & RESET ----------------- */
+    :root{ --bg:#071024; --card:#081329; --muted:#98a7bf; --accent:#2563eb; --glass: rgba(255,255,255,0.03); --radius:12px; --max-width:1100px; --ff: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:var(--ff);background:linear-gradient(180deg,#071024 0%, #071a2a 100%);color:#e6eef8;-webkit-font-smoothing:antialiased;line-height:1.45;padding:1rem;display:flex;justify-content:center}
+    a{color:inherit}
+
+    .site{width:100%;max-width:var(--max-width)}
+    header{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 0}
+    .brand{display:flex;align-items:center;gap:.8rem}
+    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#8b5cf6);display:grid;place-items:center;font-weight:700;color:white}
+    nav{display:flex;gap:1rem;align-items:center}
+    nav a{color:var(--muted);text-decoration:none;padding:.4rem .6rem;border-radius:8px;font-weight:600}
+    nav a:hover, nav a.active{color:white;background:var(--glass)}
+
+    /* HERO */
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:2rem;align-items:center;padding:1.2rem 0}
+    .hero-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:1.6rem;border-radius:var(--radius);backdrop-filter: blur(6px);}
+    h1{margin:0 0 .6rem;font-size:clamp(1.6rem,2.4vw,2.6rem);color:#fff}
+    p.lead{color:var(--muted);margin:0 0 1rem}
+    .cta{display:flex;gap:.6rem}
+    .btn{background:var(--accent);color:white;border:none;padding:.6rem 1rem;border-radius:10px;cursor:pointer;font-weight:700}
+    .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+
+    /* Projects Grid + Filters */
+    .controls{display:flex;gap:.6rem;flex-wrap:wrap;margin:0.6rem 0}
+    .filter{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:.4rem .6rem;border-radius:999px;color:var(--muted);cursor:pointer}
+    .filter.active{background:var(--accent);color:white}
+
+    .projects{margin-top:1rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+    .card{background:var(--card);padding:1rem;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.6);transform:translateY(0);transition:transform .28s ease, box-shadow .28s ease}
+    .card:hover{transform:translateY(-6px);box-shadow:0 12px 28px rgba(2,6,23,0.7)}
+    .card h3{margin:.2rem 0 .6rem}
+    .card p{color:var(--muted);font-size:.95rem}
+    .tags{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:0.8rem}
+    .tag{background:rgba(255,255,255,0.03);padding:.25rem .5rem;border-radius:999px;font-size:.82rem;color:var(--muted)}
+
+    /* Modal / Lightbox */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.6);z-index:50;padding:1rem}
+    .modal.open{display:flex}
+    .modal-card{background:#061026;padding:1rem;border-radius:12px;max-width:800px;width:100%;box-shadow:0 12px 40px rgba(2,6,23,0.8)}
+    .modal-header{display:flex;justify-content:space-between;align-items:center}
+    .modal-body{display:grid;grid-template-columns:1fr 240px;gap:1rem;margin-top:.6rem}
+    .modal-body img{width:100%;border-radius:8px}
+    .close{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:.3rem .6rem;border-radius:8px;color:var(--muted);cursor:pointer}
+
+    /* Skills */
+    .skills{display:flex;gap:1rem;flex-wrap:wrap;margin-top:1rem}
+    .skill{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:.6rem .8rem;border-radius:8px;color:var(--muted);font-weight:600}
+
+    /* Grid layouts */
+    .two-column{display:grid;grid-template-columns:1fr 360px;gap:1rem;align-items:start;margin-top:1rem}
+    form{display:grid;gap:.6rem}
+    label{font-size:.9rem;color:var(--muted)}
+    input,textarea,select{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:.6rem;border-radius:8px;color:#eaf2ff}
+
+    /* To-do & small apps */
+    .mini{display:grid;gap:.6rem}
+    .todo-input{display:flex;gap:.6rem}
+    .todo-input input{flex:1}
+    ul.tasks{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.5rem}
+    ul.tasks li{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.02);padding:.5rem;border-radius:8px}
+
+    /* Responsive */
+    @media (max-width:1000px){ .hero{grid-template-columns:1fr} .two-column{grid-template-columns:1fr} .projects{grid-template-columns:repeat(2,1fr)} }
+    @media (max-width:640px){ nav{display:none} header{justify-content:space-between} .projects{grid-template-columns:1fr} .logo{width:40px;height:40px} }
+
+    a:focus, button:focus, input:focus, textarea:focus{outline:3px solid rgba(37,99,235,0.18);outline-offset:2px}
+    .hidden{display:none}
+  </style>
 </head>
 <body>
+  <div class="site" id="site">
     <header>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="portfolio.html">Portfolio</a>
-            <a href="contact.html">Contact</a>
-        </nav>
+      <div class="brand">
+        <div class="logo" aria-hidden>VC</div>
+        <div>
+          <div style="font-weight:800">Vijayalakshmi Chandra</div>
+          <div style="font-size:.85rem;color:var(--muted)">Frontend / Full‑Stack Intern</div>
+        </div>
+      </div>
+      <nav id="mainNav" aria-label="Main Navigation">
+        <a href="#home" data-target="home" class="active">Home</a>
+        <a href="#projects" data-target="projects">Projects</a>
+        <a href="#skills" data-target="skills">Skills</a>
+        <a href="#blog" data-target="blog">Blog</a>
+        <a href="#contact" data-target="contact">Contact</a>
+      </nav>
     </header>
+
     <main>
-        <h1>Welcome to My Capstone Project!</h1>
-        <p>This is the homepage of my final web application.</p>
+      <!-- HERO -->
+      <section id="home" class="hero-card">
+        <div class="hero">
+          <div>
+            <h1>Hi, I'm <span style="color:var(--accent)">Vijayalakshmi</span> — I build clean, responsive web experiences.</h1>
+            <p class="lead">I'm an internship trainee focused on HTML, CSS, JavaScript, and modern web stacks. I enjoy turning designs into accessible, performant websites and building small client-side apps.</p>
+
+            <div class="cta">
+              <button class="btn" onclick="scrollToSection('projects')">View Projects</button>
+              <button class="btn secondary" onclick="scrollToSection('contact')">Contact</button>
+            </div>
+
+            <div style="margin-top:1rem">
+              <div style="color:var(--muted)">Featured Skills</div>
+              <div class="skills" aria-hidden>
+                <div class="skill">HTML</div>
+                <div class="skill">CSS</div>
+                <div class="skill">JavaScript</div>
+                <div class="skill">React.js</div>
+                <div class="skill">Node.js</div>
+                <div class="skill">PHP</div>
+              </div>
+            </div>
+          </div>
+
+          <aside style="width:100%;max-width:420px">
+            <div class="card">
+              <h3>About</h3>
+              <p style="color:var(--muted)">I'm Vijayalakshmi Chandra — currently training in frontend and full-stack development. I focus on responsive UIs, client-side apps (to-do, quizzes), and small backend integrations.</p>
+              <div style="margin-top:1rem">
+                <strong style="color:var(--muted);font-size:.9rem">Contact</strong>
+                <div style="color:var(--muted);font-size:.9rem">vijayalakshmi@example.com</div>
+              </div>
+            </div>
+
+            <div style="margin-top:1rem" class="card">
+              <h3>Quick Links</h3>
+              <div style="display:flex;gap:.6rem;margin-top:.6rem;flex-wrap:wrap">
+                <button class="btn" onclick="showResume()">Download CV</button>
+                <button class="btn secondary" onclick="openGitHub()">GitHub</button>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- Projects -->
+      <section id="projects" class="card" style="margin-top:1rem">
+        <h2>Selected Projects</h2>
+        <div class="controls" id="filters" aria-label="Project filters">
+          <button class="filter active" data-filter="all">All</button>
+          <button class="filter" data-filter="html">HTML/CSS</button>
+          <button class="filter" data-filter="js">JavaScript</button>
+          <button class="filter" data-filter="react">React</button>
+          <button class="filter" data-filter="node">Node</button>
+        </div>
+        <div class="projects" id="projectsGrid" role="list"></div>
+      </section>
+
+      <!-- Blog + mini apps -->
+      <section class="two-column">
+        <div>
+          <div id="blog" class="card">
+            <h3>Mini Blog</h3>
+            <p style="color:var(--muted)">Client-side posts saved locally — useful for demos.</p>
+            <form id="postForm" style="margin-top:0.8rem" onsubmit="event.preventDefault(); savePost();">
+              <label for="postTitle">Title</label>
+              <input id="postTitle" placeholder="Project notes or short article" />
+              <label for="postBody">Body</label>
+              <textarea id="postBody" placeholder="Write something..."></textarea>
+              <div style="display:flex;gap:.6rem;margin-top:.6rem">
+                <button type="button" class="btn" onclick="savePost()">Save Post</button>
+                <button type="button" class="btn secondary" onclick="clearPosts()">Clear Posts</button>
+              </div>
+            </form>
+            <div id="posts" style="margin-top:1rem"></div>
+          </div>
+
+          <div id="skills" class="card" style="margin-top:1rem">
+            <h3>Skills & Tools</h3>
+            <div class="skills" aria-hidden>
+              <div class="skill">HTML</div>
+              <div class="skill">CSS</div>
+              <div class="skill">JavaScript</div>
+              <div class="skill">React.js</div>
+              <div class="skill">Node.js</div>
+              <div class="skill">PHP</div>
+              <div class="skill">Bootstrap</div>
+              <div class="skill">Python</div>
+              <div class="skill">Java</div>
+            </div>
+          </div>
+        </div>
+
+        <aside>
+          <div class="card">
+            <h3>Mini To-Do</h3>
+            <div class="mini">
+              <div class="todo-input">
+                <input id="taskInput" placeholder="Add a task..." />
+                <button class="btn" onclick="addTask()">Add</button>
+              </div>
+              <ul class="tasks" id="taskList" aria-live="polite"></ul>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:1rem">
+            <h3>Quiz (mini)</h3>
+            <div id="quizMini">
+              <div id="qText"></div>
+              <div id="qOptions"></div>
+              <div style="margin-top:.5rem"><button class="btn" onclick="nextMini()">Next</button></div>
+              <div id="qScore" style="color:var(--muted);margin-top:.6rem"></div>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <!-- Contact -->
+      <section id="contact" class="card" style="margin-top:1rem">
+        <h2>Contact Me</h2>
+        <form id="contactForm" onsubmit="handleContact(event)">
+          <label for="name">Name</label>
+          <input id="name" required />
+          <label for="emailc">Email</label>
+          <input id="emailc" type="email" required />
+          <label for="message">Message</label>
+          <textarea id="message" required></textarea>
+          <div style="display:flex;gap:.6rem;margin-top:.6rem">
+            <button class="btn" type="submit">Send</button>
+            <button type="button" class="btn secondary" onclick="viewStoredMessages()">View Saved</button>
+          </div>
+        </form>
+        <div id="storedMessages" style="margin-top:1rem"></div>
+      </section>
+
     </main>
-    <footer>
-        <p>&copy; 2025 My App</p>
-    </footer>
+
+    <footer style="margin-top:1.6rem;color:var(--muted);text-align:center;padding:1rem 0">Built for internship — optimized, responsive & accessible. © <span id="year"></span></footer>
+  </div>
+
+  <!-- Modal for project details -->
+  <div class="modal" id="modal">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <div id="modalTitle" style="font-weight:700"></div>
+        <button class="close" onclick="closeModal()" aria-label="Close">Close</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ----------------- Helpers -----------------
+    const $ = (s,ctx=document)=>ctx.querySelector(s);
+    const $$ = (s,ctx=document)=>Array.from(ctx.querySelectorAll(s));
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ----------------- Projects data (personalized examples) -----------------
+    const projects = [
+      {id:1, title:'Personal Portfolio', desc:'Full portfolio website with responsive design, blog, mini‑apps, and contact form. Built for internship demo.', tags:['html','js','react'], img:'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=60', details:'Built using HTML, CSS, and JavaScript. Includes localStorage demos (to‑do, blog) and accessibility considerations.'},
+      {id:2, title:'Interactive Quiz App', desc:'A dynamic quiz app featuring DOM manipulation, scoring, and responsive UI.', tags:['js'], img:'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=60', details:'Demonstrates event handling, state management, and user feedback with animations.'},
+      {id:3, title:'Task Manager (To‑Do)', desc:'To‑do list with add/edit/delete and persistent storage.', tags:['js','node'], img:'https://images.unsplash.com/photo-1555066932-0a013c6a6f2b?auto=format&fit=crop&w=800&q=60', details:'Client‑side persistence using localStorage; can be extended with a Node.js backend.'}
+    ];
+
+    // ----------------- Render Projects & Filters -----------------
+    const projectsGrid = $('#projectsGrid');
+    function renderProjects(filter='all'){
+      projectsGrid.innerHTML = '';
+      const list = projects.filter(p => filter==='all' ? true : p.tags.includes(filter));
+      for(const p of list){
+        const el = document.createElement('article'); el.className='card'; el.setAttribute('role','listitem');
+        el.innerHTML = `
+          <h3>${escapeHtml(p.title)}</h3>
+          <p class=\"muted\">${escapeHtml(p.desc)}</p>
+          <div class=\"tags\">${p.tags.map(t=>`<span class=\"tag\">${escapeHtml(t)}</span>`).join('')}</div>
+          <div style=\"margin-top:.8rem;display:flex;gap:.6rem\">
+            <button class='btn' onclick=\"openModal(${p.id})\">Details</button>
+            <a class='btn secondary' href='#' onclick=\"openProjectLink(event,${p.id})\">Live</a>
+          </div>
+        `;
+        projectsGrid.appendChild(el);
+      }
+    }
+    function openProjectLink(e,id){ e.preventDefault(); alert('Open live/demo for project ID: '+id); }
+
+    // Filters
+    $$('#filters .filter').forEach(btn=>btn.addEventListener('click',()=>{
+      $$('#filters .filter').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter; renderProjects(f);
+    }));
+
+    // ----------------- Modal / Lightbox -----------------
+    const modal = $('#modal');
+    function openModal(id){ const p = projects.find(x=>x.id===id); $('#modalTitle').textContent = p.title; $('#modalBody').innerHTML = `
+      <div style=\"display:flex;gap:1rem;align-items:flex-start\">
+        <img src=\"${p.img}\" alt=\"${escapeHtml(p.title)}\" style=\"width:100%;max-width:320px;border-radius:8px\"/>
+        <div>
+          <p class=\"muted\">${escapeHtml(p.details)}</p>
+          <div style=\"margin-top:.5rem\"><strong class=\"muted\">Tags:</strong> ${p.tags.map(t=>`<span class=\\"tag\\">${escapeHtml(t)}</span>`).join(' ')}</div>
+        </div>
+      </div>
+    `; modal.classList.add('open'); document.body.style.overflow='hidden'; }
+    function closeModal(){ modal.classList.remove('open'); document.body.style.overflow=''; }
+    modal.addEventListener('click', (e)=>{ if(e.target===modal) closeModal(); });
+
+    // ----------------- Mini Blog (localStorage) -----------------
+    const POSTS_KEY = 'vc_posts_v1';
+    function loadPosts(){ try{return JSON.parse(localStorage.getItem(POSTS_KEY))||[]}catch(e){return[]} }
+    function savePosts(posts){ localStorage.setItem(POSTS_KEY, JSON.stringify(posts)) }
+    function renderPosts(){ const posts = loadPosts(); $('#posts').innerHTML = posts.length ? posts.map(p=>`<div style=\"border-top:1px solid rgba(255,255,255,0.03);padding:.6rem 0\"><strong>${escapeHtml(p.title)}</strong><div class=\"muted\">${escapeHtml(p.body)}</div><div style=\"margin-top:.4rem;color:var(--muted);font-size:.85rem\">Saved ${new Date(p.t).toLocaleString()}</div></div>`).join('') : '<div class="muted">No posts yet.</div>'; }
+    function savePost(){ const title=$('#postTitle').value.trim(); const body=$('#postBody').value.trim(); if(!title||!body){alert('Provide title and body');return} const posts=loadPosts(); posts.unshift({title,body,t:Date.now()}); savePosts(posts); $('#postTitle').value=''; $('#postBody').value=''; renderPosts(); }
+    function clearPosts(){ if(confirm('Clear posts?')){ localStorage.removeItem(POSTS_KEY); renderPosts(); } }
+    renderPosts();
+
+    // ----------------- To-do (localStorage) -----------------
+    const TASK_KEY='vc_tasks_v1';
+    function loadTasks(){ try{return JSON.parse(localStorage.getItem(TASK_KEY))||[]}catch(e){return[]} }
+    function saveTasks(tasks){ localStorage.setItem(TASK_KEY, JSON.stringify(tasks)) }
+    let tasks = loadTasks();
+    function renderTasks(){ const ul = $('#taskList'); ul.innerHTML=''; tasks.forEach((t,i)=>{ const li=document.createElement('li'); li.innerHTML = `<span>${escapeHtml(t.text)}</span><div style=\"display:flex;gap:.4rem\"><button aria-label=\"toggle\" onclick=\"toggleTask(${i})\">${t.done? '✅':'⬜'}</button><button aria-label=\"del\" onclick=\"deleteTask(${i})\">✖</button></div>`; if(t.done) li.style.opacity=0.6; ul.appendChild(li); }) }
+    function addTask(){ const v=$('#taskInput').value.trim(); if(!v) return; tasks.unshift({text:v,done:false}); saveTasks(tasks); $('#taskInput').value=''; renderTasks(); }
+    function deleteTask(i){ tasks.splice(i,1); saveTasks(tasks); renderTasks(); }
+    function toggleTask(i){ tasks[i].done=!tasks[i].done; saveTasks(tasks); renderTasks(); }
+    renderTasks();
+
+    // ----------------- Mini Quiz -----------------
+    const quiz = [{q:'What does CSS stand for?', opts:['Cascading Style Sheets','Computer Style Sheets','Creative Style System'], a:0},{q:'Which selects an element by id in JS?', opts:['getElementById','queryAll','#id'], a:0}];
+    let qi=0,qscore=0; function loadMini(){ const p=quiz[qi]; $('#qText').textContent=p.q; $('#qOptions').innerHTML = p.opts.map((o,idx)=>`<div style=\"margin:.25rem 0\"><button class=\"btn secondary\" onclick=\"answerMini(${idx})\">${escapeHtml(o)}</button></div>`).join(''); $('#qScore').textContent=''; }
+    function answerMini(idx){ if(idx===quiz[qi].a){ qscore++ } qi++; if(qi>=quiz.length){ $('#qText').textContent='Quiz complete'; $('#qOptions').innerHTML=''; $('#qScore').textContent=`Score: ${qscore}/${quiz.length}`; qi=0; qscore=0; } else loadMini(); }
+    function nextMini(){ loadMini(); }
+    loadMini();
+
+    // ----------------- Contact (store messages locally) -----------------
+    const MSG_KEY='vc_messages_v1'; function handleContact(e){ e.preventDefault(); const n=$('#name').value.trim(), em=$('#emailc').value.trim(), m=$('#message').value.trim(); if(!n||!em||!m){alert('Complete all fields');return} const msgs = JSON.parse(localStorage.getItem(MSG_KEY)||'[]'); msgs.unshift({name:n,email:em,message:m,t:Date.now()}); localStorage.setItem(MSG_KEY, JSON.stringify(msgs)); alert('Message saved locally.'); e.target.reset(); }
+    function viewStoredMessages(){ const msgs = JSON.parse(localStorage.getItem(MSG_KEY)||'[]'); if(!msgs.length){ $('#storedMessages').innerHTML='<div class="muted">No messages.</div>'; return } $('#storedMessages').innerHTML = msgs.map(mm=>`<div style=\"border-top:1px solid rgba(255,255,255,0.03);padding:.6rem 0\"><strong>${escapeHtml(mm.name)}</strong> <div class=\"muted\">${escapeHtml(mm.email)}</div><div style=\"margin-top:.4rem\">${escapeHtml(mm.message)}</div><div class=\"muted\" style=\"margin-top:.3rem\">${new Date(mm.t).toLocaleString()}</div></div>`).join('') }
+
+    // ----------------- Utilities -----------------
+    function escapeHtml(str){ return String(str).replace(/[&<>"]/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[s]||s)); }
+    function scrollToSection(id){ const el=document.getElementById(id); if(!el) return; el.scrollIntoView({behavior:'smooth',block:'start'}); }
+    function showResume(){ const data = `Vijayalakshmi Chandra
+Frontend / Full-Stack Intern
+Skills: HTML, CSS, JS, PHP, Bootstrap, Python, Node.js, React.js, Java`; const blob = new Blob([data],{type:'text/plain'}); const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='Vijayalakshmi_Chandra_Resume.txt'; a.click(); URL.revokeObjectURL(url); }
+    function openGitHub(){ window.open('https://github.com/', '_blank'); }
+
+    // Open project modal globally
+    window.openModal = openModal; window.closeModal = closeModal; window.savePost = savePost; window.clearPosts = clearPosts; window.addTask = addTask; window.deleteTask = deleteTask; window.toggleTask = toggleTask; window.nextMini = nextMini; window.answerMini = answerMini; window.viewStoredMessages = viewStoredMessages;
+
+    // Init UI
+    renderProjects();
+
+    // Accessibility & motion reduction
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){ document.documentElement.style.scrollBehavior='auto' }
+
+    // Cross-browser hint: use feature detection and avoid deprecated APIs; this demo uses well-supported DOM APIs only.
+
+  </script>
 </body>
 </html>
-JavaScript (app.js) for Dynamic Content:
-
-JavaScript
-
-// Example of fetching and displaying dynamic content
-const mainContent = document.querySelector('main');
-
-async function loadPageContent(page) {
-    // In a real app, you might fetch content from a JSON file or API
-    const response = await fetch(`${page}.json`);
-    const data = await response.json();
-    
-    // Update the main content area dynamically
-    mainContent.innerHTML = `<h1>${data.title}</h1><p>${data.content}</p>`;
-}
-
-// Example of a simple client-side router
-document.querySelectorAll('nav a').forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const page = e.target.textContent.toLowerCase();
-        // A simple way to handle navigation without full page reloads
-        console.log(`Navigating to ${page} page...`);
-        // loadPageContent(page); // Uncomment this line if you create the JSON files
-    });
-});
-2. Optimize for Performance
-Here are code examples for key optimization techniques.
-
-Lazy Loading Images:
-Adding loading="lazy" to an image tag tells the browser to only load the image when it's about to enter the viewport, saving bandwidth and improving initial page load time.
-
-HTML
-
-<img src="large-image.jpg" alt="A large scenic photo" loading="lazy">
-Minimizing JavaScript:
-To minimize your code, you would use a build tool like webpack or an online minifier. The tool takes your original code and generates a compressed version.
-
-Original JavaScript (script.js):
-
-JavaScript
-
-// A simple function to log a message
-function showGreeting() {
-  const message = "Hello, world!";
-  console.log(message);
-}
-showGreeting();
-Minified JavaScript (script.min.js):
-
-JavaScript
-
-function showGreeting(){const a="Hello, world!";console.log(a)}showGreeting();
-3. Ensure Cross-Browser Compatibility and Mobile Responsiveness
-This involves a combination of HTML and CSS.
-
-Viewport Meta Tag:
-This single line of HTML is crucial for making your website responsive on mobile devices. It must be in the <head> of your HTML document.
-
-HTML
-
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-CSS Media Queries:
-This is the most common method for creating responsive layouts. The code below adjusts the layout and font sizes for different screen widths.
-
-CSS (styles.css):
-
-CSS
-
-/* General styles for all screen sizes */
-body {
-    font-family: sans-serif;
-    padding: 20px;
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-}
-
-/* Styles applied only when the screen is 600px wide or less */
-@media (max-width: 600px) {
-    .container {
-        flex-direction: column; /* Stacks items vertically on small screens */
-    }
-    h1 {
-        font-size: 1.5em; /* Shrinks the heading size */
-    }
-}
-
-/* Styles applied only when the screen is 1200px wide or more */
-@media (min-width: 1200px) {
-    .container {
-        flex-direction: row; /* Arranges items horizontally on large screens */
-        justify-content: space-between;
-    }
-}
