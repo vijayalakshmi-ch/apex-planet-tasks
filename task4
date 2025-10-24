@@ -1,68 +1,359 @@
 Task 4: Full Project Implementation 🏗️
 Action: Enhance a to-do list app so tasks are saved and retrieved using localStorage.
 
-HTML:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web Development Internship Project</title>
+  <style>
+    /* ======== GLOBAL STYLES ======== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-HTML
+    body {
+      font-family: "Poppins", sans-serif;
+      background: #f3f4f6;
+      color: #333;
+    }
 
-<h1>My To-Do List</h1>
-<input type="text" id="taskInput" placeholder="Add a new task...">
-<button id="addTaskBtn">Add Task</button>
-<ul id="taskList"></ul>
-JavaScript:
+    nav {
+      background: linear-gradient(135deg, #5b86e5, #36d1dc);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      color: white;
+    }
 
-JavaScript
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 1rem;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
 
-const taskInput = document.getElementById('taskInput');
-const addTaskBtn = document.getElementById('addTaskBtn');
-const taskList = document.getElementById('taskList');
+    nav a:hover {
+      color: #222;
+    }
 
-// Load tasks from localStorage when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-  const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-  tasks.forEach(task => addTaskToDOM(task));
-});
+    .container {
+      padding: 2rem;
+      max-width: 1000px;
+      margin: auto;
+    }
 
-// Function to add a task to the DOM and localStorage
-function addTaskToDOM(taskText) {
-  const li = document.createElement('li');
-  li.textContent = taskText;
+    h1, h2 {
+      color: #5b86e5;
+    }
 
-  // Add a delete button to each task
-  const deleteBtn = document.createElement('button');
-  deleteBtn.textContent = 'X';
-  deleteBtn.addEventListener('click', () => {
-    // Remove the task from the DOM and localStorage
-    li.remove();
-    removeTaskFromLocalStorage(taskText);
-  });
-  li.appendChild(deleteBtn);
-  taskList.appendChild(li);
-}
+    section {
+      display: none;
+      animation: fadeIn 0.5s ease-in-out;
+    }
 
-// Save tasks to localStorage
-function saveTasksToLocalStorage() {
-  const tasks = [];
-  taskList.querySelectorAll('li').forEach(item => {
-    // Get the text content of the task (excluding the delete button text)
-    tasks.push(item.firstChild.textContent.trim());
-  });
-  localStorage.setItem('tasks', JSON.stringify(tasks));
-}
+    section.active {
+      display: block;
+    }
 
-// Remove a specific task from localStorage
-function removeTaskFromLocalStorage(taskText) {
-  let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-  tasks = tasks.filter(task => task !== taskText);
-  localStorage.setItem('tasks', JSON.stringify(tasks));
-}
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-// Add a new task when the button is clicked
-addTaskBtn.addEventListener('click', () => {
-  const newTask = taskInput.value.trim();
-  if (newTask) {
-    addTaskToDOM(newTask);
-    saveTasksToLocalStorage();
-    taskInput.value = ''; // Clear the input field
-  }
-});
+    /* ======== HOME PAGE ======== */
+    #home img {
+      width: 100%;
+      border-radius: 12px;
+      margin: 1rem 0;
+    }
+
+    .highlight {
+      color: #36d1dc;
+      font-weight: 600;
+    }
+
+    /* ======== FORM PAGE ======== */
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .full {
+      grid-column: span 2;
+    }
+
+    .submit-btn {
+      grid-column: span 2;
+      background: #5b86e5;
+      color: white;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .submit-btn:hover {
+      background: #36d1dc;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.8rem;
+    }
+
+    /* ======== QUIZ PAGE ======== */
+    .quiz {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .question {
+      margin-bottom: 1.2rem;
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+
+    .option {
+      display: block;
+      margin: 0.5rem 0;
+      padding: 0.6rem;
+      background: #f2f2f2;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .option:hover {
+      background: #e0e7ff;
+    }
+
+    .option.correct { background: #d4edda; }
+    .option.wrong { background: #f8d7da; }
+
+    .btn {
+      margin-top: 1rem;
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .score {
+      font-size: 1.3rem;
+      margin-top: 1rem;
+      color: #36d1dc;
+    }
+
+    /* ======== RESPONSIVE ======== */
+    @media (max-width: 768px) {
+      form {
+        grid-template-columns: 1fr;
+      }
+      .submit-btn {
+        grid-column: span 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div><strong>Internship Project</strong></div>
+    <div>
+      <a href="#" onclick="showSection('home')">Home</a>
+      <a href="#" onclick="showSection('register')">Register</a>
+      <a href="#" onclick="showSection('quiz')">Quiz</a>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- ======== HOME SECTION ======== -->
+    <section id="home" class="active">
+      <h1>Welcome to Web Development Internship</h1>
+      <p>This mini website showcases all stages of your learning journey — from <span class="highlight">basic web design</span> to <span class="highlight">advanced JavaScript and DOM manipulation</span>.</p>
+      <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f" alt="Web Development">
+      <h2>What You’ll Learn</h2>
+      <ul>
+        <li>HTML structure, headings, images, and links</li>
+        <li>CSS styling, Flexbox, and Grid layouts</li>
+        <li>JavaScript interactions, forms, validation, and storage</li>
+        <li>Building complete responsive projects</li>
+      </ul>
+      <button class="btn" onclick="showSection('register')">Start Registration</button>
+    </section>
+
+    <!-- ======== REGISTER SECTION ======== -->
+    <section id="register">
+      <h2>Student Registration</h2>
+      <form id="registerForm" novalidate>
+        <div>
+          <label for="fname">First Name</label>
+          <input type="text" id="fname" required>
+          <div class="error" id="fnameError"></div>
+        </div>
+
+        <div>
+          <label for="lname">Last Name</label>
+          <input type="text" id="lname" required>
+          <div class="error" id="lnameError"></div>
+        </div>
+
+        <div>
+          <label for="email">Email</label>
+          <input type="email" id="email" required>
+          <div class="error" id="emailError"></div>
+        </div>
+
+        <div>
+          <label for="course">Preferred Course</label>
+          <select id="course" required>
+            <option value="">Select</option>
+            <option value="frontend">Frontend Development</option>
+            <option value="backend">Backend Development</option>
+            <option value="fullstack">Full Stack Development</option>
+          </select>
+          <div class="error" id="courseError"></div>
+        </div>
+
+        <div class="full">
+          <button type="submit" class="submit-btn">Submit</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ======== QUIZ SECTION ======== -->
+    <section id="quiz">
+      <div class="quiz" id="quizBox">
+        <h2>Quick JavaScript Quiz</h2>
+        <div class="question" id="question"></div>
+        <div id="options"></div>
+        <button class="btn" id="nextBtn">Next</button>
+        <div class="score" id="score"></div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    /* ======== NAVIGATION ======== */
+    function showSection(id) {
+      document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
+
+    /* ======== FORM VALIDATION + LOCAL STORAGE ======== */
+    const form = document.getElementById("registerForm");
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const fname = document.getElementById("fname").value.trim();
+      const lname = document.getElementById("lname").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const course = document.getElementById("course").value.trim();
+
+      let valid = true;
+      document.querySelectorAll(".error").forEach(el => el.textContent = "");
+
+      if (!fname) { document.getElementById("fnameError").textContent = "First name required"; valid = false; }
+      if (!lname) { document.getElementById("lnameError").textContent = "Last name required"; valid = false; }
+      if (!email.includes("@")) { document.getElementById("emailError").textContent = "Enter valid email"; valid = false; }
+      if (!course) { document.getElementById("courseError").textContent = "Select course"; valid = false; }
+
+      if (valid) {
+        const student = { fname, lname, email, course };
+        localStorage.setItem("studentData", JSON.stringify(student));
+        alert("✅ Registration saved successfully!");
+        showSection('quiz');
+      }
+    });
+
+    /* ======== QUIZ LOGIC ======== */
+    const quizData = [
+      { q: "What does HTML stand for?", options: ["HyperText Markup Language", "Hyper Tool Multi Language", "Hyper Transfer Mode Link", "Home Tool Markup Language"], correct: 0 },
+      { q: "Which property in CSS is used for text color?", options: ["font-color", "text-color", "color", "fgcolor"], correct: 2 },
+      { q: "Which symbol is used for comments in JavaScript?", options: ["//", "<!-- -->", "##", "--"], correct: 0 },
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const nextBtn = document.getElementById("nextBtn");
+    const scoreEl = document.getElementById("score");
+
+    function loadQuestion() {
+      const q = quizData[current];
+      questionEl.textContent = q.q;
+      optionsEl.innerHTML = "";
+      q.options.forEach((opt, idx) => {
+        const div = document.createElement("div");
+        div.classList.add("option");
+        div.textContent = opt;
+        div.onclick = () => selectOption(idx);
+        optionsEl.appendChild(div);
+      });
+      nextBtn.style.display = "none";
+    }
+
+    function selectOption(i) {
+      const q = quizData[current];
+      const opts = document.querySelectorAll(".option");
+      opts.forEach(o => o.style.pointerEvents = "none");
+      if (i === q.correct) {
+        opts[i].classList.add("correct");
+        score++;
+      } else {
+        opts[i].classList.add("wrong");
+        opts[q.correct].classList.add("correct");
+      }
+      nextBtn.style.display = "inline-block";
+    }
+
+    nextBtn.addEventListener("click", () => {
+      current++;
+      if (current < quizData.length) loadQuestion();
+      else showResult();
+    });
+
+    function showResult() {
+      questionEl.textContent = "Quiz Completed!";
+      optionsEl.innerHTML = "";
+      nextBtn.style.display = "none";
+      scoreEl.textContent = `You scored ${score} / ${quizData.length}`;
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
