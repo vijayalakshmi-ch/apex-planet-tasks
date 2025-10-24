@@ -1,46 +1,278 @@
 Task 2: Intermediate HTML, CSS, and JavaScript 🛠️
 Action: Implement form validation that checks for required fields and correct email format.
 
-HTML:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responsive Registration Form</title>
 
-HTML
+  <style>
+    /* ======== GLOBAL STYLES ======== */
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #5b86e5, #36d1dc);
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-<form id="contactForm">
-  <label for="name">Name:</label>
-  <input type="text" id="name" required>
-  
-  <label for="email">Email:</label>
-  <input type="email" id="email" required>
-  
-  <button type="submit">Submit</button>
-</form>
-JavaScript:
+    /* ======== CONTAINER ======== */
+    .container {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      width: 90%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: row;
+    }
 
-JavaScript
+    /* ======== LEFT SECTION (INFO) ======== */
+    .info {
+      background: #36d1dc;
+      color: white;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      text-align: center;
+    }
 
-const contactForm = document.getElementById('contactForm');
+    .info h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
 
-contactForm.addEventListener('submit', (event) => {
-  // Prevent the default form submission
-  event.preventDefault();
+    .info p {
+      max-width: 300px;
+    }
 
-  const nameInput = document.getElementById('name');
-  const emailInput = document.getElementById('email');
+    /* ======== RIGHT SECTION (FORM) ======== */
+    .form-section {
+      flex: 2;
+      padding: 2rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 1rem;
+    }
 
-  // Check if fields are empty
-  if (nameInput.value === '' || emailInput.value === '') {
-    alert('Please fill out all required fields.');
-    return;
-  }
+    h1 {
+      grid-column: span 2;
+      text-align: center;
+      margin-bottom: 1rem;
+      color: #5b86e5;
+    }
 
-  // Basic email validation using a regular expression
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(emailInput.value)) {
-    alert('Please enter a valid email address.');
-    return;
-  }
+    label {
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      display: block;
+    }
 
-  // If validation passes, you can submit the form or process the data
-  alert('Form submitted successfully!');
-  // You would typically send the data to a server here
-});
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #36d1dc;
+    }
+
+    .full-width {
+      grid-column: span 2;
+    }
+
+    .submit-btn {
+      grid-column: span 2;
+      background: #5b86e5;
+      color: white;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .submit-btn:hover {
+      background: #36d1dc;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.85rem;
+      margin-top: 0.3rem;
+    }
+
+    /* ======== RESPONSIVE DESIGN ======== */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .form-section {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        grid-column: span 1;
+      }
+
+      .submit-btn {
+        grid-column: span 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Left Section -->
+    <div class="info">
+      <h2>Welcome to WebDev Internship</h2>
+      <p>Fill out the form to register and explore responsive web design using HTML, CSS, and JavaScript.</p>
+    </div>
+
+    <!-- Right Section -->
+    <form class="form-section" id="registerForm" novalidate>
+      <h1>Registration Form</h1>
+
+      <div>
+        <label for="fname">First Name</label>
+        <input type="text" id="fname" name="fname" placeholder="John" required />
+        <div class="error" id="fnameError"></div>
+      </div>
+
+      <div>
+        <label for="lname">Last Name</label>
+        <input type="text" id="lname" name="lname" placeholder="Doe" required />
+        <div class="error" id="lnameError"></div>
+      </div>
+
+      <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="john@example.com" required />
+        <div class="error" id="emailError"></div>
+      </div>
+
+      <div>
+        <label for="phone">Phone</label>
+        <input type="tel" id="phone" name="phone" placeholder="9876543210" pattern="[0-9]{10}" required />
+        <div class="error" id="phoneError"></div>
+      </div>
+
+      <div class="full-width">
+        <label for="address">Address</label>
+        <textarea id="address" name="address" rows="2" placeholder="Enter your address" required></textarea>
+        <div class="error" id="addressError"></div>
+      </div>
+
+      <div>
+        <label for="gender">Gender</label>
+        <select id="gender" required>
+          <option value="">--Select--</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+        <div class="error" id="genderError"></div>
+      </div>
+
+      <div>
+        <label for="course">Preferred Course</label>
+        <select id="course" required>
+          <option value="">--Select--</option>
+          <option value="frontend">Frontend Development</option>
+          <option value="backend">Backend Development</option>
+          <option value="fullstack">Full Stack Development</option>
+        </select>
+        <div class="error" id="courseError"></div>
+      </div>
+
+      <button type="submit" class="submit-btn">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    // ======== FORM VALIDATION SCRIPT ========
+    document.getElementById("registerForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      // Clear previous errors
+      const errorFields = document.querySelectorAll(".error");
+      errorFields.forEach(el => (el.textContent = ""));
+
+      let isValid = true;
+
+      const fname = document.getElementById("fname").value.trim();
+      const lname = document.getElementById("lname").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const address = document.getElementById("address").value.trim();
+      const gender = document.getElementById("gender").value;
+      const course = document.getElementById("course").value;
+
+      // Validation conditions
+      if (fname === "") {
+        document.getElementById("fnameError").textContent = "First name is required";
+        isValid = false;
+      }
+
+      if (lname === "") {
+        document.getElementById("lnameError").textContent = "Last name is required";
+        isValid = false;
+      }
+
+      const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+      if (!emailPattern.test(email)) {
+        document.getElementById("emailError").textContent = "Enter a valid email";
+        isValid = false;
+      }
+
+      const phonePattern = /^[0-9]{10}$/;
+      if (!phonePattern.test(phone)) {
+        document.getElementById("phoneError").textContent = "Enter a valid 10-digit phone number";
+        isValid = false;
+      }
+
+      if (address === "") {
+        document.getElementById("addressError").textContent = "Address is required";
+        isValid = false;
+      }
+
+      if (gender === "") {
+        document.getElementById("genderError").textContent = "Please select gender";
+        isValid = false;
+      }
+
+      if (course === "") {
+        document.getElementById("courseError").textContent = "Please select course";
+        isValid = false;
+      }
+
+      // If all fields are valid
+      if (isValid) {
+        alert("✅ Registration Successful! Thank you for registering.");
+        this.reset();
+      }
+    });
+  </script>
+</body>
+</html>
